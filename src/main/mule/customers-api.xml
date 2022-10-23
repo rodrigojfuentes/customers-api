@@ -28,21 +28,21 @@
             </http:error-response>
         </http:listener>
         <apikit:console config-ref="customers-api-config" />
-		<error-handler ref="apikit-error-handler" />
+        <error-handler ref="apikit-error-handler" />
     </flow>
     <flow name="put:\customers\(customerId):application\json:customers-api-config">
-		<logger level="INFO" doc:name="Updating customer" doc:id="904351da-27af-4dca-8da9-4047d6cf992b" message='#["Updating Customer with ID " ++ (attributes.uriParams.customerId default "")]'/>
-		<flow-ref doc:name="impl-put-customer-by-id-flow" doc:id="5a5a5e06-e3df-40ba-a470-04f41afcac00" name="impl-put-customer-by-id-flow"/>
-		<logger level="INFO" doc:name="Customer updated" doc:id="a0c2d4fd-87ed-4135-abb3-9608ee784cd7" message='#["Customer with ID " ++ (attributes.uriParams.customerId default "") ++ " updated successfully"]'/>
+        <logger level="INFO" doc:name="Updating customer" doc:id="904351da-27af-4dca-8da9-4047d6cf992b" message="#[&quot;Updating Customer with ID &quot; ++ (attributes.uriParams.customerId default &quot;&quot;)]" />
+        <flow-ref doc:name="impl-put-customer-by-id-flow" doc:id="5a5a5e06-e3df-40ba-a470-04f41afcac00" name="impl-put-customer-by-id-flow" />
+        <logger level="INFO" doc:name="Customer updated" doc:id="a0c2d4fd-87ed-4135-abb3-9608ee784cd7" message="#[&quot;Customer with ID &quot; ++ (vars.customerId default &quot;&quot;) ++ &quot; updated successfully&quot;]" />
     </flow>
     <flow name="get:\customers\(customerId):customers-api-config">
-		<logger level="INFO" doc:name="Retrieving Customer" doc:id="13f0f56f-e743-4973-b3ac-bb74b2ad0a2a" message='#["Retrieving Customer with ID " ++ (attributes.uriParams.customerId default "")]' />
-		<flow-ref doc:name="impl-get-customer-by-id-flow" doc:id="4e04febc-8e1c-4c2d-a39b-b7a6c2903e00" name="impl-get-customer-by-id-flow" />
-		<logger level="INFO" doc:name="Customer Retrieved" doc:id="4fbb7059-d538-4bf1-a6c3-5bb338355c33" message='#["Customer with ID " ++ (attributes.uriParams.customerId default "") ++ " retrieved successfully"]' />
+        <logger level="INFO" doc:name="Retrieving Customer" doc:id="13f0f56f-e743-4973-b3ac-bb74b2ad0a2a" message="#[&quot;Retrieving Customer with ID &quot; ++ (attributes.uriParams.customerId default &quot;&quot;)]" />
+        <flow-ref doc:name="impl-get-customer-by-id-flow" doc:id="4e04febc-8e1c-4c2d-a39b-b7a6c2903e00" name="impl-get-customer-by-id-flow" />
+        <logger level="INFO" doc:name="Customer Retrieved" doc:id="4fbb7059-d538-4bf1-a6c3-5bb338355c33" message="#[&quot;Customer with ID &quot; ++ (vars.customerId default &quot;&quot;) ++ &quot; retrieved successfully&quot;]" />
     </flow>
     <flow name="post:\customers:application\json:customers-api-config">
-		<logger level="INFO" doc:name="Creating Customer" doc:id="d3c225d9-6607-4a58-b607-299b620af169" message='#["Creating new Customer"]' />
-		<flow-ref doc:name="impl-post-customer-flow" doc:id="ba56575c-7173-4f6d-9232-6ea505dec945" name="impl-post-customer-flow"/>
-		<logger level="INFO" doc:name="Customer Created" doc:id="c9cca391-e69b-4ae4-841e-7a08575b0ffe" message='#["Customer with ID " ++ payload.customerId ++ " created successfully"]' />
+        <logger level="INFO" doc:name="Creating Customer" doc:id="d3c225d9-6607-4a58-b607-299b620af169" message="#[&quot;Creating new Customer&quot;]" />
+        <flow-ref doc:name="impl-post-customer-flow" doc:id="ba56575c-7173-4f6d-9232-6ea505dec945" name="impl-post-customer-flow" />
+        <logger level="INFO" doc:name="Customer Created" doc:id="c9cca391-e69b-4ae4-841e-7a08575b0ffe" message="#[&quot;Customer with ID &quot; ++ (vars.customerId default &quot;&quot;) ++ &quot; created successfully&quot;]" />
     </flow>
 </mule>

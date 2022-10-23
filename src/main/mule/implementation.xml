@@ -8,27 +8,67 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		<set-variable value="#[attributes.uriParams.'customerId']" doc:name="customerId" doc:id="30414934-7b0e-4e46-afe7-9a63b6afe0f0" variableName="customerId" />
 		<scatter-gather doc:name="Scatter-Gather" doc:id="1124ecbe-4d22-441e-9258-fe7d7609d6b5" >
 			<route >
+				<ee:transform doc:name="Set request payload" doc:id="f6aca3cf-f5c3-4ff4-9c9c-e175683fedc1" >
+					<ee:message >
+						<ee:set-payload resource="dw/cosmosdb/set-put-customer-by-id-request-payload.dwl" />
+					</ee:message>
+				</ee:transform>
 				<flow-ref doc:name="cosmosdb-replace-document-sub-flow" doc:id="ebb13788-707f-42ca-b91e-ccd9e8d94baf" name="cosmosdb-replace-document-sub-flow"/>
 			</route>
 			<route >
+				<ee:transform doc:name="Set request payload" doc:id="166b0e7e-baa5-483f-9e89-3bd7f1a660bb">
+					<ee:message>
+						<ee:set-payload resource="dw/salesforce/set-put-customer-by-id-request-payload.dwl" />
+					</ee:message>
+				</ee:transform>
 				<flow-ref doc:name="salesforce-update-sobjects-sub-flow" doc:id="367ef527-be05-4256-8984-14688d220032" name="salesforce-update-sobjects-sub-flow"/>
 			</route>
 		</scatter-gather>
+		<ee:transform doc:name="Set response payload" doc:id="5711abb4-7ff2-4826-a13f-e08bd6f25189" >
+			<ee:message >
+				<ee:set-payload resource="dw/set-put-customer-by-id-response-payload.dwl" />
+			</ee:message>
+		</ee:transform>
 		
 	</flow>
 	<flow name="impl-get-customer-by-id-flow" doc:id="a85225ed-c929-4caa-922f-16c14d2d9f14" >
 		<set-variable value="#[attributes.uriParams.'customerId']" doc:name="customerId" doc:id="6078332a-47c6-42b3-8541-a4ccea37be82" variableName="customerId"/>
+		<ee:transform doc:name="Set request payload" doc:id="f4a99d64-36b5-40f2-a85e-4943f65b8ef7">
+			<ee:message>
+				<ee:set-payload resource="dw/cosmosdb/set-get-customer-by-id-request-payload.dwl" />
+			</ee:message>
+		</ee:transform>
 		<flow-ref doc:name="cosmosdb-get-document-sub-flow" doc:id="2fd45cb5-527b-4045-86aa-556ef789b819" name="cosmosdb-get-document-sub-flow"/>
+		<ee:transform doc:name="Set response payload" doc:id="a14176ff-31d3-4777-bb07-dc7494abd65a" >
+			<ee:message >
+				<ee:set-payload resource="dw/set-get-customer-by-id-response-payload.dwl" />
+			</ee:message>
+		</ee:transform>
 	</flow>
 	<flow name="impl-post-customer-flow" doc:id="e008a3ac-ca59-4119-a1b2-44f39b4a7e69">
 		<set-variable value="#[uuid()]" doc:name="customerId" doc:id="cc5d7a56-99d6-4b76-9f24-70d9e4dfec19" variableName="customerId"/>
 		<scatter-gather doc:name="Scatter-Gather" doc:id="63285c8e-e73c-4dc4-b72e-459fb2cf8dcf" >
 			<route >
+				<ee:transform doc:name="Set request payload" doc:id="cf0307c6-3734-4520-b122-872e1c2c6e9a">
+					<ee:message>
+						<ee:set-payload resource="dw/cosmosdb/set-post-customer-request-payload.dwl" />
+					</ee:message>
+				</ee:transform>
 				<flow-ref doc:name="cosmosdb-create-document-sub-flow" doc:id="6f7f08cf-b9cf-4e9f-9f20-d158d49c6713" name="cosmosdb-create-document-sub-flow" />
 			</route>
 			<route >
+				<ee:transform doc:name="Set request payload" doc:id="37a1dcb1-0fb1-4cc9-a76b-a33dc422f788">
+					<ee:message>
+						<ee:set-payload resource="dw/salesforce/set-post-customer-request-payload.dwl" />
+					</ee:message>
+				</ee:transform>
 				<flow-ref doc:name="salesforce-create-sobjects-sub-flow" doc:id="dbee9ca3-b2fd-4fcc-9c89-7c645afdb916" name="salesforce-create-sobjects-sub-flow"/>
 			</route>
 		</scatter-gather>
+		<ee:transform doc:name="Set response payload" doc:id="0b7a229d-0af0-43a2-8137-38707fc702e9" >
+			<ee:message >
+				<ee:set-payload resource="dw/set-post-customer-response-payload.dwl" />
+			</ee:message>
+		</ee:transform>
 	</flow>
 </mule>
