@@ -18,92 +18,12 @@
 		<error-handler ref="apikit-error-handler" />
     </flow>
     <flow name="put:\customers:application\json:customers-api-config">
-        <ee:transform>
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  customerId: "4d4de7d6-7f5e-4778-9c70-babba6c25c55",
-  personalInformation: {
-    firstName: "Ulrich",
-    lastName: "Nielsen",
-    companyName: "E-ffoc",
-    email: "ulrichN@effoc.com",
-    phone: "+494341927420",
-    address: [
-      {
-        street: "Steinbrueckstrasse",
-        houseNumber: 114,
-        city: "Nuremberg",
-        country: "Germany",
-        postalCode: 90408
-      }
-    ]
-  }
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="impl-put-customer-by-id-flow" doc:id="a65593e2-0b91-4223-9247-a6cd6aa7c879" name="impl-put-customer-by-id-flow" />
     </flow>
     <flow name="get:\customers\(customerId):customers-api-config">
-        <ee:transform>
-            <ee:variables>
-                <ee:set-variable variableName="customerId">attributes.uriParams.'customerId'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
-        <ee:transform>
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  customerId: "4d4de7d6-7f5e-4778-9c70-babba6c25c55",
-  personalInformation: {
-    firstName: "Ulrich",
-    lastName: "Nielsen",
-    companyName: "E-ffoc",
-    email: "ulrichN@effoc.com",
-    phone: "+494341927420",
-    address: [
-      {
-        street: "Steinbrueckstrasse",
-        houseNumber: 114,
-        city: "Nuremberg",
-        country: "Germany",
-        postalCode: 90408
-      }
-    ]
-  }
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="impl-get-customer-by-id-flow" doc:id="1ca4af31-7162-4f27-89f5-8a9a97335912" name="impl-get-customer-by-id-flow" />
     </flow>
     <flow name="post:\customers:application\json:customers-api-config">
-        <ee:transform>
-            <ee:message>
-                <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{
-  customerId: "4d4de7d6-7f5e-4778-9c70-babba6c25c55",
-  personalInformation: {
-    firstName: "Ulrich",
-    lastName: "Nielsen",
-    companyName: "E-ffoc",
-    email: "ulrichN@effoc.com",
-    phone: "+494341927420",
-    address: [
-      {
-        street: "Steinbrueckstrasse",
-        houseNumber: 114,
-        city: "Nuremberg",
-        country: "Germany",
-        postalCode: 90408
-      }
-    ]
-  }
-}]]></ee:set-payload>
-            </ee:message>
-        </ee:transform>
+		<flow-ref doc:name="impl-post-customer-flow" doc:id="8d46cb02-fa01-4078-b606-452ae551d3eb" name="impl-post-customer-flow" />
     </flow>
 </mule>

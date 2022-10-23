@@ -1,0 +1,96 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<flow name="impl-put-customer-by-id-flow" doc:id="e4347b83-a0b6-41bf-878d-7cadbcc03c0c">
+		<ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  customerId: "4d4de7d6-7f5e-4778-9c70-babba6c25c55",
+  personalInformation: {
+    firstName: "Ulrich",
+    lastName: "Nielsen",
+    companyName: "E-ffoc",
+    email: "ulrichN@effoc.com",
+    phone: "+494341927420",
+    address: [
+      {
+        street: "Steinbrueckstrasse",
+        houseNumber: 114,
+        city: "Nuremberg",
+        country: "Germany",
+        postalCode: 90408
+      }
+    ]
+  }
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+	</flow>
+	<flow name="impl-get-customer-by-id-flow" doc:id="a85225ed-c929-4caa-922f-16c14d2d9f14" >
+		<ee:transform>
+            <ee:variables>
+                <ee:set-variable variableName="customerId">attributes.uriParams.'customerId'</ee:set-variable>
+            </ee:variables>
+        </ee:transform>
+		<ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  customerId: "4d4de7d6-7f5e-4778-9c70-babba6c25c55",
+  personalInformation: {
+    firstName: "Ulrich",
+    lastName: "Nielsen",
+    companyName: "E-ffoc",
+    email: "ulrichN@effoc.com",
+    phone: "+494341927420",
+    address: [
+      {
+        street: "Steinbrueckstrasse",
+        houseNumber: 114,
+        city: "Nuremberg",
+        country: "Germany",
+        postalCode: 90408
+      }
+    ]
+  }
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+	</flow>
+	<flow name="impl-post-customer-flow" doc:id="e008a3ac-ca59-4119-a1b2-44f39b4a7e69">
+		<ee:transform>
+            <ee:message>
+                <ee:set-payload><![CDATA[%dw 2.0
+output application/json
+---
+{
+  customerId: "4d4de7d6-7f5e-4778-9c70-babba6c25c55",
+  personalInformation: {
+    firstName: "Ulrich",
+    lastName: "Nielsen",
+    companyName: "E-ffoc",
+    email: "ulrichN@effoc.com",
+    phone: "+494341927420",
+    address: [
+      {
+        street: "Steinbrueckstrasse",
+        houseNumber: 114,
+        city: "Nuremberg",
+        country: "Germany",
+        postalCode: 90408
+      }
+    ]
+  }
+}]]></ee:set-payload>
+            </ee:message>
+        </ee:transform>
+	</flow>
+</mule>
