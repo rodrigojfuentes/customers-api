@@ -84,5 +84,37 @@ output application/json
                     </ee:variables>
                 </ee:transform>
             </on-error-propagate>
+            <on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="e969b1d4-8c3a-4236-906d-606cc79aacbe" type="APP:SERVICE_UNAVAILABLE">
+			<set-variable value="503" doc:name="httpStatus" doc:id="13ef4901-00de-4255-97ce-9d8496c77c04" variableName="httpStatus" />
+			<ee:transform doc:name="Transform Message" doc:id="6e5b3fd6-1ba1-4782-9dee-846dccfc9ccd" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{message: "Service Unavailable"}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[501]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
+		<on-error-propagate enableNotifications="true" logException="true" doc:name="On Error Propagate" doc:id="d52aac00-9a12-47f0-9c60-11f7f25e3cc4" type="APP:COSMOSDB_UNAVAILABLE,APP:SALESFORCE_UNAVAILABLE">
+			<flow-ref doc:name="circuit-breaker-evaluate-status-sub-flow" doc:id="1e0dcb96-1910-4106-bead-a7855bcb58b1" name="circuit-breaker-evaluate-status-sub-flow" />
+			<set-variable value="500" doc:name="httpStatus" doc:id="4f13c504-430d-46c2-8652-6a85d327c5dc" variableName="httpStatus"/>
+			<ee:transform doc:name="Transform Message" doc:id="1301ccd7-dbe6-4a7e-9f62-6a78ff9b2e36" >
+				<ee:message >
+					<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+	message: "Internal Server Error",
+	correlationId: correlationId
+}]]></ee:set-payload>
+				</ee:message>
+				<ee:variables >
+					<ee:set-variable variableName="httpStatus" ><![CDATA[501]]></ee:set-variable>
+				</ee:variables>
+			</ee:transform>
+		</on-error-propagate>
 	</error-handler>
 </mule>

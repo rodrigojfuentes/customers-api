@@ -14,7 +14,20 @@
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:error-response>
         </http:listener>
-        <apikit:router config-ref="customers-api-config" />
+		<flow-ref doc:name="circuit-breaker-retrieve-status-sub-flow" doc:id="994b4958-3669-4a54-b1bb-fc8c906a66f9" name="circuit-breaker-retrieve-status-sub-flow" target="cbStatus"/>
+		<choice doc:name="Choice" doc:id="d8275040-9054-498c-8b3b-22cc39ac3da5" >
+			<when expression='#[vars.cbStatus == "closed"]'>
+				<apikit:router config-ref="customers-api-config" />
+			</when>
+			<when expression='#[vars.cbStatus == "half-open"]'>
+				<apikit:router doc:name="APIkit Router" doc:id="f6ab7954-229d-473a-a1ce-68722d93152c" config-ref="customers-api-config" />
+				<set-variable value="closed" doc:name="cbStatus" doc:id="7e1fdd86-42fa-467f-8266-1d891811cc0c" variableName="cbStatus"/>
+				<flow-ref doc:name="circuit-breaker-store-status-sub-flow" doc:id="5459afb5-bed7-4467-8772-563cc333590c" name="circuit-breaker-store-status-sub-flow" />
+			</when>
+			<otherwise>
+				<raise-error doc:name="APP:SERVICE_UNAVAILABLE" doc:id="240e1c1c-3ca9-410e-af74-971a3d9ebbb4" type="APP:SERVICE_UNAVAILABLE" description="The API is not available to handle new requests at the moment"/>
+			</otherwise>
+		</choice>
         <error-handler ref="apikit-error-handler" />
     </flow>
     <flow name="customers-api-console">

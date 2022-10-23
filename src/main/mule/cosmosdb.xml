@@ -9,7 +9,9 @@ http://www.mulesoft.org/schema/mule/azure-cosmos-db-connector-mule-4 http://www.
 	<sub-flow name="cosmosdb-replace-document-sub-flow" doc:id="c57dde9a-f4a4-4d0e-b8de-bef780e70427" >
 <logger level="INFO" doc:name="Updating customer" doc:id="a312e84e-df23-4097-b3ca-512b6e4d2854" message='#["Updating Customer with ID " ++ (vars.customerId default "") ++ " in CosmosDB"]' />
 		<!-- [STUDIO:"Replace Document"]		<azure-cosmos-db-connector-mule-4:replace-document doc:name="Replace Document" doc:id="dbff257f-6a38-49ee-8e0f-2847ab7336c4" config-ref="Azure_Cosmos_Db_Resource_Token_Config"/> [STUDIO] -->
-		<ee:transform doc:name="Set dummy response payload">
+		<choice doc:name="Choice" doc:id="612a8929-3c3b-4c9f-9aa8-ce771d719598" >
+			<when expression="#[random() &lt; Mule::p('circuit-breaker.threshold')]">
+				<ee:transform doc:name="Set dummy response payload">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -35,12 +37,19 @@ output application/json
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
+			</when>
+			<otherwise >
+				<raise-error doc:name="APP:COSMOSDB_UNAVAILABLE" doc:id="f9a003f5-1010-40aa-b5d2-ba98248eee73" type="APP:COSMOSDB_UNAVAILABLE" description="CosmosDB is currently unavailable"/>
+			</otherwise>
+		</choice>
 		<logger level="INFO" doc:name="Customer updated" doc:id="bffb6b03-4f70-49ef-94d6-62dce504515a" message='#["Customer with ID " ++ (vars.customerId default "") ++ " updated in CosmosDB successfully"]' />
 	</sub-flow>
 	<sub-flow name="cosmosdb-get-document-sub-flow" doc:id="2ebe8d5d-1dc6-43ec-9426-8ef6083e04f3" >
 <logger level="INFO" doc:name="Retrieving Customer" doc:id="f1209a9c-8866-4730-8211-7066c395da1f" message='#["Retrieving Customer with ID " ++ (attributes.uriParams.customerId default "") ++ " from CosmosDB"]' />
 		<!-- [STUDIO:"Get Document"]		<azure-cosmos-db-connector-mule-4:get-document doc:name="Get Document" doc:id="53b02673-2565-4258-b0d9-dfbd0c321486" config-ref="Azure_Cosmos_Db_Resource_Token_Config"/> [STUDIO] -->
-		<ee:transform doc:name="Set dummy response payload">
+		<choice doc:name="Choice" doc:id="9066cb30-3bb2-4424-8fd3-764a6cd32579" >
+			<when expression="#[random() &lt; Mule::p('circuit-breaker.threshold')]">
+				<ee:transform doc:name="Set dummy response payload">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -66,12 +75,19 @@ output application/json
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
+			</when>
+			<otherwise >
+				<raise-error doc:name="APP:COSMOSDB_UNAVAILABLE" doc:id="8dacd935-6235-4f90-860d-acdb26239185" type="APP:COSMOSDB_UNAVAILABLE" description="CosmosDB is currently unavailable"/>
+			</otherwise>
+		</choice>
 		<logger level="INFO" doc:name="Customer Retrieved" doc:id="391d0308-68ea-4bfa-b23b-1d911b825e77" message='#["Customer with ID " ++ (attributes.uriParams.customerId default "") ++ " retrieved from CosmosDB successfully"]' />
 	</sub-flow>
 	<sub-flow name="cosmosdb-create-document-sub-flow" doc:id="32f9004b-853a-4d57-8e21-f57bed2caaac" >
 <logger level="INFO" doc:name="Creating Customer" doc:id="e36d5591-9e74-4d35-8406-de22f71a2dda" message='#["Creating new Customer with ID " ++ (vars.customerId default "") ++ " in CosmosDB"]' />
 		<!-- [STUDIO:"Create Document"]		<azure-cosmos-db-connector-mule-4:create-document doc:name="Create Document" doc:id="ba2f0573-05da-4bea-b89e-fe1483e3c552" config-ref="Azure_Cosmos_Db_Resource_Token_Config"/> [STUDIO] -->
-		<ee:transform doc:name="Set dummy response payload">
+		<choice doc:name="Choice" doc:id="8fd8b0dd-8ed6-4602-b8e9-4d3aa8b4c077" >
+			<when expression="#[random() &lt; Mule::p('circuit-breaker.threshold')]">
+				<ee:transform doc:name="Set dummy response payload">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -97,6 +113,11 @@ output application/json
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
+			</when>
+			<otherwise >
+				<raise-error doc:name="APP:COSMOSDB_UNAVAILABLE" doc:id="b870416b-972a-4c6d-a7b0-17940b3f4396" type="APP:COSMOSDB_UNAVAILABLE" description="CosmosDB is currently unavailable"/>
+			</otherwise>
+		</choice>
 		<logger level="INFO" doc:name="Customer Created" doc:id="baf0651c-aa3f-473d-b556-c18ec7109db8" message='#["Customer with ID " ++ (vars.customerId default "") ++ " created in CosmosDB successfully"]' />
 	</sub-flow>
 </mule>

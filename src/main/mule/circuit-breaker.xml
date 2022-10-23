@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
+	<sub-flow name="circuit-breaker-evaluate-status-sub-flow" doc:id="357e78d2-083b-454c-ae71-68f9dc15f767" >
+		<flow-ref doc:name="circuit-breaker-retrieve-status-sub-flow" doc:id="f03249d6-cd02-4a9f-82a9-1c9ff6ba28a7" name="circuit-breaker-retrieve-status-sub-flow" target="cbStatus"/>
+		<choice doc:name="Choice" doc:id="7f1404f8-78ec-44e6-9255-43676fb13415">
+				<when expression='#[vars.cbStatus == "closed"]'>
+					<set-variable value="half-open" doc:name="cbStatus" doc:id="4d6db572-14c9-4eee-a8c4-9046ebebdc35" variableName="cbStatus"/>
+				<flow-ref doc:name="circuit-breaker-store-status-sub-flow" doc:id="af17c4fe-409b-4aae-bc84-d3a2a33b98a1" name="circuit-breaker-store-status-sub-flow"/>
+				</when>
+				<otherwise>
+					<set-variable value="open" doc:name="cbStatus" doc:id="ba7509f2-4969-4030-866c-9ef3ee7be0dd" variableName="cbStatus"/>
+				<flow-ref doc:name="circuit-breaker-store-status-sub-flow" doc:id="b0505836-ed71-4456-9c03-6766ace53bd8" name="circuit-breaker-store-status-sub-flow"/>
+				</otherwise>
+			</choice>
+	</sub-flow>
+	<flow name="circuit-breaker-evaluate-status-scheduler-flow" doc:id="646d36fb-9639-4b9f-aa36-8a7009a90fec" >
+		<scheduler doc:name="Scheduler" doc:id="572090f7-5494-4e20-b701-b9c5287516c7" >
+			<scheduling-strategy >
+				<fixed-frequency frequency="60000"/>
+			</scheduling-strategy>
+		</scheduler>
+		<flow-ref doc:name="circuit-breaker-retrieve-status-sub-flow" doc:id="2b4ac328-ee51-4836-ad78-e62ab5b8ceb4" name="circuit-breaker-retrieve-status-sub-flow" target="cbStatus" />
+		<choice doc:name="Choice" doc:id="0e9136d5-6b2b-490a-8c93-e2c698b3540a" >
+			<when expression='#[vars.cbStatus == "open"]'>
+				<logger level="INFO" doc:name="Circuit breaker to half-open state" doc:id="08d7277d-d1a7-4397-95eb-2fbee91698ed" message="Setting the circuit breaker to half-open state" />
+				<set-variable value="half-open" doc:name="cbStatus" doc:id="93779fe2-5a71-4add-866c-e5c72c8c159b" variableName="cbStatus" />
+				<flow-ref doc:name="circuit-breaker-store-status-sub-flow" doc:id="c6616a70-6215-4716-ba6d-ee9536151b3a" name="circuit-breaker-store-status-sub-flow" />
+			</when>
+		</choice>
+	</flow>
+	<sub-flow name="circuit-breaker-store-status-sub-flow" doc:id="e8b4c078-44cb-4298-955d-08589a1de1b7" >
+		<os:store doc:name="Update Circuit Breaker status" doc:id="b8deb39c-7826-43df-8ff6-c9715bfa51ce" key="status" objectStore="Circuit_Breaker_Object_store">
+					<os:value><![CDATA[#[vars.cbStatus]]]></os:value>
+				</os:store>
+	</sub-flow>
+	<sub-flow name="circuit-breaker-retrieve-status-sub-flow" doc:id="1b03e5c4-7ba5-4172-979b-6db79a04a521" >
+		<os:retrieve doc:name="Circuit Breaker status" doc:id="6d7b621b-fab2-47ef-9020-6a03934d3ba5" key="status" objectStore="Circuit_Breaker_Object_store">
+			<os:default-value><![CDATA[closed]]></os:default-value>
+		</os:retrieve>
+	</sub-flow>
+</mule>

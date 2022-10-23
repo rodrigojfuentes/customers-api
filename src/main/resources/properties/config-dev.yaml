@@ -19,3 +19,10 @@ cosmosdb:
   db-account-url: "TBD"
   resource-token: "TBD"
   version: "TBD"
+
+circuit-breaker:
+  threshold: "0.5"
+  os:
+    max-entries: "1"
+    entry-ttl: "86400"
+    expiration-interval: "1"

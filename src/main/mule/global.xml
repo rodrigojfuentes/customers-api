@@ -1,10 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:azure-cosmos-db-connector-mule-4="http://www.mulesoft.org/schema/mule/azure-cosmos-db-connector-mule-4" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
-	xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+<mule xmlns:os="http://www.mulesoft.org/schema/mule/os" xmlns:azure-cosmos-db-connector-mule-4="http://www.mulesoft.org/schema/mule/azure-cosmos-db-connector-mule-4"
+	xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
-http://www.mulesoft.org/schema/mule/azure-cosmos-db-connector-mule-4 http://www.mulesoft.org/schema/mule/azure-cosmos-db-connector-mule-4/current/mule-azure-cosmos-db-connector-mule-4.xsd">
+http://www.mulesoft.org/schema/mule/azure-cosmos-db-connector-mule-4 http://www.mulesoft.org/schema/mule/azure-cosmos-db-connector-mule-4/current/mule-azure-cosmos-db-connector-mule-4.xsd
+http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
 	<global-property doc:name="Global Property" doc:id="803d1db6-cb9e-42d2-bab3-4e199703f6ec" name="mule.env" value="dev" />
 	<configuration-properties doc:name="Configuration properties" doc:id="27e7c7f5-b212-40ad-8450-fc361c1f47a4" file="properties/config-${mule.env}.yaml" />
 	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="3361259a-4e2b-42e0-87e0-c5e4bcb28a8f" >
@@ -13,4 +14,5 @@ http://www.mulesoft.org/schema/mule/azure-cosmos-db-connector-mule-4 http://www.
 	<azure-cosmos-db-connector-mule-4:resource-token-config name="Azure_Cosmos_Db_Resource_Token_Config" doc:name="Azure Cosmos Db Resource Token Config" doc:id="544ff1f4-550e-4843-ba6b-b66a6cf4ff05" >
 		<azure-cosmos-db-connector-mule-4:resource-token-auth-connection baseUri="${cosmosdb.db-account-url}" resourceToken="${cosmosdb.resource-token}" version="${cosmosdb.version}" />
 	</azure-cosmos-db-connector-mule-4:resource-token-config>
+	<os:object-store name="Circuit_Breaker_Object_store" doc:name="Object store" doc:id="2694a5c0-e005-4f8a-86aa-655fe657fb61" maxEntries="${circuit-breaker.os.max-entries}" entryTtl="${circuit-breaker.os.entry-ttl}" expirationInterval="${circuit-breaker.os.expiration-interval}" persistent="false"/>
 </mule>
