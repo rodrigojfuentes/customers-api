@@ -1,5 +1,13 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd"></mule>
+<mule xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+	<flow name="salesforce-update-sobjects-flow" doc:id="b794c12e-d31e-42cb-a65c-fb00d15563be" >
+		<salesforce:update doc:name="Update" doc:id="258ae694-a765-4714-8fb2-64ccd9a1cddc" config-ref="Salesforce_Config"/>
+	</flow>
+	<flow name="salesforce-create-sobjects-flow" doc:id="7c1e9293-6876-4de6-8b11-f7e20096a0e6" >
+		<salesforce:create doc:name="Create" doc:id="95155874-1686-4a30-983b-58399f220f68" config-ref="Salesforce_Config"/>
+	</flow>
+</mule>
