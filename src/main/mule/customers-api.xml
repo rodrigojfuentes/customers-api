@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <mule xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:apikit="http://www.mulesoft.org/schema/mule/mule-apikit" xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd http://www.mulesoft.org/schema/mule/mule-apikit http://www.mulesoft.org/schema/mule/mule-apikit/current/mule-apikit.xsd http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd ">
     <http:listener-config name="customers-api-httpListenerConfig">
-        <http:listener-connection host="0.0.0.0" port="8081" />
+        <http:listener-connection host="${http.host}" port="${http.port}" />
     </http:listener-config>
     <apikit:config name="customers-api-config" api="resource::c4f668c6-4fc2-449b-ba9b-6e20a7dc7f82:customers-api:1.0.2:raml:zip:customers-api.raml" outboundHeadersMapName="outboundHeaders" httpStatusVarName="httpStatus" />
     <flow name="customers-api-main">
-        <http:listener config-ref="customers-api-httpListenerConfig" path="/api/*">
+        <http:listener config-ref="customers-api-httpListenerConfig" path="${api.path}">
             <http:response statusCode="#[vars.httpStatus default 200]">
                 <http:headers>#[vars.outboundHeaders default {}]</http:headers>
             </http:response>
@@ -15,7 +15,7 @@
             </http:error-response>
         </http:listener>
         <apikit:router config-ref="customers-api-config" />
-        <error-handler ref="apikit-error-handler">
+        <error-handler ref="apikit-error-handler" />
     </flow>
     <flow name="customers-api-console">
         <http:listener config-ref="customers-api-httpListenerConfig" path="/console/*">
@@ -28,21 +28,7 @@
             </http:error-response>
         </http:listener>
         <apikit:console config-ref="customers-api-config" />
-        <error-handler>
-            <on-error-propagate type="APIKIT:NOT_FOUND">
-                <ee:transform>
-                    <ee:message>
-                        <ee:set-payload><![CDATA[%dw 2.0
-output application/json
----
-{message: "Resource not found"}]]></ee:set-payload>
-                    </ee:message>
-                    <ee:variables>
-                        <ee:set-variable variableName="httpStatus">404</ee:set-variable>
-                    </ee:variables>
-                </ee:transform>
-            </on-error-propagate>
-        </error-handler>
+		<error-handler ref="apikit-error-handler" />
     </flow>
     <flow name="put:\customers\(customerId):application\json:customers-api-config">
 		<flow-ref doc:name="impl-put-customer-by-id-flow" doc:id="5a5a5e06-e3df-40ba-a470-04f41afcac00" name="impl-put-customer-by-id-flow"/>
