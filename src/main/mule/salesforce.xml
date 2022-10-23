@@ -1,13 +1,44 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<mule xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce" xmlns="http://www.mulesoft.org/schema/mule/core"
-	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
-	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
-http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd">
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core" xmlns:salesforce="http://www.mulesoft.org/schema/mule/salesforce"
+	xmlns="http://www.mulesoft.org/schema/mule/core"
+	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="salesforce-update-sobjects-sub-flow" doc:id="b794c12e-d31e-42cb-a65c-fb00d15563be" >
-		<salesforce:update doc:name="Update" doc:id="258ae694-a765-4714-8fb2-64ccd9a1cddc" config-ref="Salesforce_Config"/>
+		<ee:transform doc:name="Set dummy response payload" doc:id="a0c6d624-2408-4160-8bd9-c773de2d5e74" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  customerId: "4d4de7d6-7f5e-4778-9c70-babba6c25c55",
+  firstName: "Ulrich",
+  lastName: "Nielsen",
+  companyName: "E-ffoc",
+  email: "ulrichN@effoc.com",
+  phone: "+494341927420"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+<!-- [STUDIO:"Update"]		<salesforce:update doc:name="Update" doc:id="258ae694-a765-4714-8fb2-64ccd9a1cddc" config-ref="Salesforce_Config"/> [STUDIO] -->
 	</sub-flow>
 	<sub-flow name="salesforce-create-sobjects-sub-flow" doc:id="7c1e9293-6876-4de6-8b11-f7e20096a0e6" >
-		<salesforce:create doc:name="Create" doc:id="95155874-1686-4a30-983b-58399f220f68" config-ref="Salesforce_Config"/>
+		<ee:transform doc:name="Set dummy response payload" doc:id="1dec76c3-2639-4817-bbe7-94a4418755c8" >
+			<ee:message >
+				<ee:set-payload ><![CDATA[%dw 2.0
+output application/json
+---
+{
+  customerId: "4d4de7d6-7f5e-4778-9c70-babba6c25c55",
+  firstName: "Ulrich",
+  lastName: "Nielsen",
+  companyName: "E-ffoc",
+  email: "ulrichN@effoc.com",
+  phone: "+494341927420"
+}]]></ee:set-payload>
+			</ee:message>
+		</ee:transform>
+<!-- [STUDIO:"Create"]		<salesforce:create doc:name="Create" doc:id="95155874-1686-4a30-983b-58399f220f68" config-ref="Salesforce_Config"/> [STUDIO] -->
 	</sub-flow>
 </mule>
