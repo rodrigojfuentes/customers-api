@@ -6,11 +6,29 @@
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<flow name="impl-put-customer-by-id-flow" doc:id="e4347b83-a0b6-41bf-878d-7cadbcc03c0c">
 		<set-variable value="#[attributes.uriParams.'customerId']" doc:name="customerId" doc:id="30414934-7b0e-4e46-afe7-9a63b6afe0f0" variableName="customerId" />
+		<scatter-gather doc:name="Scatter-Gather" doc:id="1124ecbe-4d22-441e-9258-fe7d7609d6b5" >
+			<route >
+				<flow-ref doc:name="cosmosdb-replace-document-flow" doc:id="ebb13788-707f-42ca-b91e-ccd9e8d94baf" name="cosmosdb-replace-document-flow"/>
+			</route>
+			<route >
+				<flow-ref doc:name="salesforce-update-sobjects-flow" doc:id="367ef527-be05-4256-8984-14688d220032" name="salesforce-update-sobjects-flow"/>
+			</route>
+		</scatter-gather>
 		
 	</flow>
 	<flow name="impl-get-customer-by-id-flow" doc:id="a85225ed-c929-4caa-922f-16c14d2d9f14" >
 		<set-variable value="#[attributes.uriParams.'customerId']" doc:name="customerId" doc:id="6078332a-47c6-42b3-8541-a4ccea37be82" variableName="customerId"/>
+		<flow-ref doc:name="cosmosdb-get-document-flow" doc:id="2fd45cb5-527b-4045-86aa-556ef789b819" name="cosmosdb-get-document-flow"/>
 	</flow>
 	<flow name="impl-post-customer-flow" doc:id="e008a3ac-ca59-4119-a1b2-44f39b4a7e69">
+		<set-variable value="#[uuid()]" doc:name="customerId" doc:id="cc5d7a56-99d6-4b76-9f24-70d9e4dfec19" variableName="customerId"/>
+		<scatter-gather doc:name="Scatter-Gather" doc:id="63285c8e-e73c-4dc4-b72e-459fb2cf8dcf" >
+			<route >
+				<flow-ref doc:name="cosmosdb-create-document-flow" doc:id="6f7f08cf-b9cf-4e9f-9f20-d158d49c6713" name="cosmosdb-create-document-flow" />
+			</route>
+			<route >
+				<flow-ref doc:name="salesforce-create-sobjects-flow" doc:id="dbee9ca3-b2fd-4fcc-9c89-7c645afdb916" name="salesforce-create-sobjects-flow"/>
+			</route>
+		</scatter-gather>
 	</flow>
 </mule>
