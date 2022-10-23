@@ -8,9 +8,9 @@ http://www.mulesoft.org/schema/mule/azure-cosmos-db-connector-mule-4 http://www.
 	<global-property doc:name="Global Property" doc:id="803d1db6-cb9e-42d2-bab3-4e199703f6ec" name="mule.env" value="dev" />
 	<configuration-properties doc:name="Configuration properties" doc:id="27e7c7f5-b212-40ad-8450-fc361c1f47a4" file="properties/config-${mule.env}.yaml" />
 	<salesforce:sfdc-config name="Salesforce_Config" doc:name="Salesforce Config" doc:id="3361259a-4e2b-42e0-87e0-c5e4bcb28a8f" >
-		<salesforce:basic-connection username="TBD" password="TBD" />
+		<salesforce:basic-connection username="${salesforce.username}" password="${salesforce.password}" securityToken="${salesforce.security-token}"/>
 	</salesforce:sfdc-config>
 	<azure-cosmos-db-connector-mule-4:resource-token-config name="Azure_Cosmos_Db_Resource_Token_Config" doc:name="Azure Cosmos Db Resource Token Config" doc:id="544ff1f4-550e-4843-ba6b-b66a6cf4ff05" >
-		<azure-cosmos-db-connector-mule-4:resource-token-auth-connection baseUri="TBD" resourceToken="TBD" version="TBD" />
+		<azure-cosmos-db-connector-mule-4:resource-token-auth-connection baseUri="${cosmosdb.db-account-url}" resourceToken="${cosmosdb.resource-token}" version="${cosmosdb.version}" />
 	</azure-cosmos-db-connector-mule-4:resource-token-config>
 </mule>

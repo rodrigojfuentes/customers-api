@@ -1,0 +1,21 @@
+api:
+  id: ""
+  path: "/api/*"
+
+http:
+  host: "0.0.0.0"
+  port: "8081"
+  secure-port: "8082"
+  private:
+    port: "8091"
+    secure-port: "8092"
+
+salesforce:
+  username: "TBD"
+  password: "TBD"
+  security-token: "TBD"
+
+cosmosdb:
+  db-account-url: "TBD"
+  resource-token: "TBD"
+  version: "TBD"
