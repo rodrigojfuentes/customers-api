@@ -6,9 +6,10 @@
 http://www.mulesoft.org/schema/mule/salesforce http://www.mulesoft.org/schema/mule/salesforce/current/mule-salesforce.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<sub-flow name="salesforce-update-sobjects-sub-flow" doc:id="b794c12e-d31e-42cb-a65c-fb00d15563be" >
-		<ee:transform doc:name="Set dummy response payload" doc:id="a0c6d624-2408-4160-8bd9-c773de2d5e74" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<logger level="INFO" doc:name="Updating customer" doc:id="2ab299d1-00fc-4200-93cf-3830a316b7da" message='#["Updating Customer with ID " ++ (vars.customerId default "") ++ " in Salesforce"]' />
+		<ee:transform doc:name="Set dummy response payload" doc:id="a0c6d624-2408-4160-8bd9-c773de2d5e74">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -21,12 +22,15 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
+		<logger level="INFO" doc:name="Customer updated" doc:id="249557ac-b8c0-49e1-af96-3b15f7535b34" message='#["Customer with ID " ++ (vars.customerId default "") ++ " updated in Salesforce successfully"]' />
 <!-- [STUDIO:"Update"]		<salesforce:update doc:name="Update" doc:id="258ae694-a765-4714-8fb2-64ccd9a1cddc" config-ref="Salesforce_Config"/> [STUDIO] -->
 	</sub-flow>
 	<sub-flow name="salesforce-create-sobjects-sub-flow" doc:id="7c1e9293-6876-4de6-8b11-f7e20096a0e6" >
-		<ee:transform doc:name="Set dummy response payload" doc:id="1dec76c3-2639-4817-bbe7-94a4418755c8" >
-			<ee:message >
-				<ee:set-payload ><![CDATA[%dw 2.0
+		<logger level="INFO" doc:name="Creating Customer" doc:id="a6e41636-574f-43bf-8860-a07cc351297d" message='#["Creating new Customer with ID " ++ (vars.customerId default "") ++ " in Salesforce"]' />
+		<logger level="INFO" doc:name="Customer Created" doc:id="73f5661e-41f0-4abb-b98c-1bc38f233493" message='#["Customer with ID " ++ (vars.customerId default "") ++ " created in Salesforce successfully"]' />
+<ee:transform doc:name="Set dummy response payload" doc:id="1dec76c3-2639-4817-bbe7-94a4418755c8">
+			<ee:message>
+				<ee:set-payload><![CDATA[%dw 2.0
 output application/json
 ---
 {
@@ -39,6 +43,6 @@ output application/json
 }]]></ee:set-payload>
 			</ee:message>
 		</ee:transform>
-<!-- [STUDIO:"Create"]		<salesforce:create doc:name="Create" doc:id="95155874-1686-4a30-983b-58399f220f68" config-ref="Salesforce_Config"/> [STUDIO] -->
+		<!-- [STUDIO:"Create"]		<salesforce:create doc:name="Create" doc:id="95155874-1686-4a30-983b-58399f220f68" config-ref="Salesforce_Config"/> [STUDIO] -->
 	</sub-flow>
 </mule>
