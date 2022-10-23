@@ -47,13 +47,6 @@
 			<classifier>mule-plugin</classifier>
 		</dependency>
 		<dependency>
-			<groupId>c4f668c6-4fc2-449b-ba9b-6e20a7dc7f82</groupId>
-			<artifactId>customers-api</artifactId>
-			<version>1.0.1</version>
-			<classifier>raml</classifier>
-			<type>zip</type>
-		</dependency>
-		<dependency>
 			<groupId>org.mule.modules</groupId>
 			<artifactId>mule-apikit-module</artifactId>
 			<version>1.6.1</version>
@@ -70,6 +63,13 @@
 			<artifactId>mule4-azure-cosmos-db-connector</artifactId>
 			<version>1.0.3</version>
 			<classifier>mule-plugin</classifier>
+		</dependency>
+		<dependency>
+			<groupId>c4f668c6-4fc2-449b-ba9b-6e20a7dc7f82</groupId>
+			<artifactId>customers-api</artifactId>
+			<version>1.0.2</version>
+			<classifier>raml</classifier>
+			<type>zip</type>
 		</dependency>
 	</dependencies>
 

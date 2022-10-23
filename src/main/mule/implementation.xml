@@ -5,6 +5,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
 	<flow name="impl-put-customer-by-id-flow" doc:id="e4347b83-a0b6-41bf-878d-7cadbcc03c0c">
+		<set-variable value="#[attributes.uriParams.'customerId']" doc:name="customerId" doc:id="30414934-7b0e-4e46-afe7-9a63b6afe0f0" variableName="customerId" />
 		
 	</flow>
 	<flow name="impl-get-customer-by-id-flow" doc:id="a85225ed-c929-4caa-922f-16c14d2d9f14" >
