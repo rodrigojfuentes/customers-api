@@ -6,7 +6,7 @@
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="
 http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/azure-cosmos-db-connector-mule-4 http://www.mulesoft.org/schema/mule/azure-cosmos-db-connector-mule-4/current/mule-azure-cosmos-db-connector-mule-4.xsd">
-	<flow name="cosmosdb-replace-document-flow" doc:id="c57dde9a-f4a4-4d0e-b8de-bef780e70427" >
+	<sub-flow name="cosmosdb-replace-document-sub-flow" doc:id="c57dde9a-f4a4-4d0e-b8de-bef780e70427" >
 		<azure-cosmos-db-connector-mule-4:replace-document doc:name="Replace Document" doc:id="dbff257f-6a38-49ee-8e0f-2847ab7336c4" config-ref="Azure_Cosmos_Db_Resource_Token_Config"/>
 		<ee:transform>
             <ee:message>
@@ -34,8 +34,8 @@ output application/json
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
-	</flow>
-	<flow name="cosmosdb-get-document-flow" doc:id="2ebe8d5d-1dc6-43ec-9426-8ef6083e04f3" >
+	</sub-flow>
+	<sub-flow name="cosmosdb-get-document-sub-flow" doc:id="2ebe8d5d-1dc6-43ec-9426-8ef6083e04f3" >
 		<azure-cosmos-db-connector-mule-4:get-document doc:name="Get Document" doc:id="53b02673-2565-4258-b0d9-dfbd0c321486" config-ref="Azure_Cosmos_Db_Resource_Token_Config"/>
 		<ee:transform>
             <ee:message>
@@ -63,8 +63,8 @@ output application/json
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
-	</flow>
-	<flow name="cosmosdb-create-document-flow" doc:id="32f9004b-853a-4d57-8e21-f57bed2caaac" >
+	</sub-flow>
+	<sub-flow name="cosmosdb-create-document-sub-flow" doc:id="32f9004b-853a-4d57-8e21-f57bed2caaac" >
 		<azure-cosmos-db-connector-mule-4:create-document doc:name="Create Document" doc:id="ba2f0573-05da-4bea-b89e-fe1483e3c552" config-ref="Azure_Cosmos_Db_Resource_Token_Config"/>
 		<ee:transform>
             <ee:message>
@@ -92,5 +92,5 @@ output application/json
 }]]></ee:set-payload>
             </ee:message>
         </ee:transform>
-	</flow>
+	</sub-flow>
 </mule>
