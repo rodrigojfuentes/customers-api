@@ -8,11 +8,7 @@ http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/
 		
 	</flow>
 	<flow name="impl-get-customer-by-id-flow" doc:id="a85225ed-c929-4caa-922f-16c14d2d9f14" >
-		<ee:transform>
-            <ee:variables>
-                <ee:set-variable variableName="customerId">attributes.uriParams.'customerId'</ee:set-variable>
-            </ee:variables>
-        </ee:transform>
+		<set-variable value="#[attributes.uriParams.'customerId']" doc:name="customerId" doc:id="6078332a-47c6-42b3-8541-a4ccea37be82" variableName="customerId"/>
 	</flow>
 	<flow name="impl-post-customer-flow" doc:id="e008a3ac-ca59-4119-a1b2-44f39b4a7e69">
 	</flow>
