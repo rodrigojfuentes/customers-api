@@ -2,4 +2,7 @@
 
 <mule xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
-	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd"></mule>
+	xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd">
+	<global-property doc:name="Global Property" doc:id="803d1db6-cb9e-42d2-bab3-4e199703f6ec" name="mule.env" value="dev" />
+	<configuration-properties doc:name="Configuration properties" doc:id="27e7c7f5-b212-40ad-8450-fc361c1f47a4" file="properties/config-${mule.env}.yaml" />
+</mule>
