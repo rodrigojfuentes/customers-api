@@ -11,7 +11,7 @@ http://www.mulesoft.org/schema/mule/azure-cosmos-db-connector-mule-4 http://www.
 		<!-- [STUDIO:"Replace Document"]		<azure-cosmos-db-connector-mule-4:replace-document doc:name="Replace Document" doc:id="dbff257f-6a38-49ee-8e0f-2847ab7336c4" config-ref="Azure_Cosmos_Db_Resource_Token_Config"/> [STUDIO] -->
 		<choice doc:name="Choice" doc:id="612a8929-3c3b-4c9f-9aa8-ce771d719598" >
 			<when expression="#[random() &lt; Mule::p('circuit-breaker.threshold')]">
-				<ee:transform doc:name="Set dummy response payload">
+				<ee:transform doc:name="Set dummy response payload" doc:id="5bb167f6-6f40-4c6b-ab9b-443ae33d13e6">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -49,7 +49,7 @@ output application/json
 		<!-- [STUDIO:"Get Document"]		<azure-cosmos-db-connector-mule-4:get-document doc:name="Get Document" doc:id="53b02673-2565-4258-b0d9-dfbd0c321486" config-ref="Azure_Cosmos_Db_Resource_Token_Config"/> [STUDIO] -->
 		<choice doc:name="Choice" doc:id="9066cb30-3bb2-4424-8fd3-764a6cd32579" >
 			<when expression="#[random() &lt; Mule::p('circuit-breaker.threshold')]">
-				<ee:transform doc:name="Set dummy response payload">
+				<ee:transform doc:name="Set dummy response payload" doc:id="caa51fdf-41a7-4423-a248-3d7cacc7e801">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json
@@ -87,7 +87,7 @@ output application/json
 		<!-- [STUDIO:"Create Document"]		<azure-cosmos-db-connector-mule-4:create-document doc:name="Create Document" doc:id="ba2f0573-05da-4bea-b89e-fe1483e3c552" config-ref="Azure_Cosmos_Db_Resource_Token_Config"/> [STUDIO] -->
 		<choice doc:name="Choice" doc:id="8fd8b0dd-8ed6-4602-b8e9-4d3aa8b4c077" >
 			<when expression="#[random() &lt; Mule::p('circuit-breaker.threshold')]">
-				<ee:transform doc:name="Set dummy response payload">
+				<ee:transform doc:name="Set dummy response payload" doc:id="d88860b5-f099-4120-b745-f9e523699c9e">
             <ee:message>
                 <ee:set-payload><![CDATA[%dw 2.0
 output application/json

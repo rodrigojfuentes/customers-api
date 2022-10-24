@@ -1,0 +1,337 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<mule xmlns:ee="http://www.mulesoft.org/schema/mule/ee/core"
+	xmlns:http="http://www.mulesoft.org/schema/mule/http" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:munit="http://www.mulesoft.org/schema/mule/munit" xmlns:munit-tools="http://www.mulesoft.org/schema/mule/munit-tools"
+	xmlns="http://www.mulesoft.org/schema/mule/core" xmlns:doc="http://www.mulesoft.org/schema/mule/documentation" xsi:schemaLocation="
+		http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
+		http://www.mulesoft.org/schema/mule/munit http://www.mulesoft.org/schema/mule/munit/current/mule-munit.xsd
+		http://www.mulesoft.org/schema/mule/munit-tools  http://www.mulesoft.org/schema/mule/munit-tools/current/mule-munit-tools.xsd
+http://www.mulesoft.org/schema/mule/http http://www.mulesoft.org/schema/mule/http/current/mule-http.xsd
+http://www.mulesoft.org/schema/mule/ee/core http://www.mulesoft.org/schema/mule/ee/core/current/mule-ee.xsd">
+	<munit:config name="customers-api-test-suite.xml" />
+	<http:request-config name="HTTP_Request_configuration" doc:name="HTTP Request configuration" doc:id="e76230cc-2e37-40fb-bab8-fe520caa573a" basePath="/api" >
+		<http:request-connection host="${http.host}" port="${http.port}" />
+	</http:request-config>
+	<munit:test name="test1-customers-api-test-suite" doc:id="69859dd9-7cf7-474d-9656-526bcbfee57c" description="Test 1: Request sent to update a Customer and finishes successfully">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="customers-api-main" />
+			<munit:enable-flow-source value="put:\customers\(customerId):application\json:customers-api-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:spy doc:name="Spy" doc:id="1ddb08cd-70e0-4f7b-ae81-b68f1ae50ce9" processor="ee:transform">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Set dummy response payload" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="5bb167f6-6f40-4c6b-ab9b-443ae33d13e6" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:before-call >
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="40b0e328-d37b-4b7f-b77b-0b929c2c28c8" actual="#[payload]" expected='#[readUrl("classpath://test1/cosmosdb-request-payload.json", "application/json")]'/>
+				</munit-tools:before-call>
+				<munit-tools:after-call >
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="f650b246-b73d-47d4-b1f3-690420c6c982" actual="#[payload]" expected='#[readUrl("classpath://test1/cosmosdb-response-payload.json", "application/json")]' />
+				</munit-tools:after-call>
+			</munit-tools:spy>
+			<munit-tools:spy doc:name="Spy" doc:id="0a996e0d-172c-4077-9995-3234bafe86c8" processor="ee:transform">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Set dummy response payload" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="a0c6d624-2408-4160-8bd9-c773de2d5e74" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:before-call >
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="7464a510-e369-44ee-b253-4ea13060d694" actual="#[payload]" expected='#[readUrl("classpath://test1/salesforce-request-payload.json", "application/json")]' />
+				</munit-tools:before-call>
+				<munit-tools:after-call >
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="8a589d02-3894-43d1-9301-18ac032ac5f0" actual="#[payload]" expected='#[readUrl("classpath://test1/salesforce-response-payload.json", "application/json")]' />
+				</munit-tools:after-call>
+			</munit-tools:spy>
+		</munit:behavior>
+		<munit:execution >
+			<set-payload value='#[output application/json --- readUrl("classpath://test1/request-payload.json")]' doc:name="Set Payload" doc:id="14f55663-cc69-4aad-b47f-920a5999ca80" />
+			<http:request method="PUT" doc:name="Request" doc:id="968444af-392c-4b53-a7c2-78912137741b" config-ref="HTTP_Request_configuration" path="/customers/{customerId}">
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Authorization" : "123"
+}]]]></http:headers>
+				<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"customerId" : "4d4de7d6-7f5e-4778-9c70-babba6c25c55"
+}]]]></http:uri-params>
+			</http:request>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Set response payload" doc:id="c21b9698-5ebc-4740-825c-d1e9bb9bedb6" processor="ee:transform" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Set response payload" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="5711abb4-7ff2-4826-a13f-e08bd6f25189" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Customer updated" doc:id="35706ed9-3468-4413-8afc-2e0ab1698444" processor="logger" times="3">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="INFO" attributeName="level" />
+					<munit-tools:with-attribute whereValue="Customer updated" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="47f414bd-d1eb-4842-93c1-73dfe4e5ccaa" actual="#[payload]" expected='#[readUrl("classpath://test1/response-payload.json")]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="test2-customers-api-test-suite" doc:id="9823d974-abb5-4941-9c71-ad7acf4ffa4f" description="Test 2: Request sent to update a Customer. Salesforce is unavailable" expectedErrorType="ANY">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="customers-api-main" />
+			<munit:enable-flow-source value="put:\customers\(customerId):application\json:customers-api-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:spy doc:name="Spy" doc:id="aa37803b-6e31-40a8-ba58-31090404f549" processor="ee:transform">
+				<munit-tools:with-attributes>
+					<munit-tools:with-attribute whereValue="Set dummy response payload" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="5bb167f6-6f40-4c6b-ab9b-443ae33d13e6" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:before-call>
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="5643b9bc-2e38-4502-8ea7-5558f67a1c13" actual="#[payload]" expected='#[readUrl("classpath://test2/cosmosdb-request-payload.json", "application/json")]' />
+				</munit-tools:before-call>
+				<munit-tools:after-call>
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="3b259117-c187-4a10-bc47-f9230bdd631c" actual="#[payload]" expected='#[readUrl("classpath://test2/cosmosdb-response-payload.json", "application/json")]' />
+				</munit-tools:after-call>
+			</munit-tools:spy>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="980b0faa-366c-4a02-90ad-5706fcb5dea6" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="salesforce-update-sobjects-sub-flow" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APP:SALESFORCE_UNAVAILABLE" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<set-payload value='#[output application/json --- readUrl("classpath://test2/request-payload.json")]' doc:name="Set Payload" doc:id="d5fb9557-3660-422d-a38b-af7426bf1c52" />
+			<http:request method="PUT" doc:name="Request" doc:id="f34cbf15-6b0b-49ba-8ce2-bb57f799bcba" config-ref="HTTP_Request_configuration" path="/customers/{customerId}">
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Authorization" : "123"
+}]]]></http:headers>
+				<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"customerId" : "4d4de7d6-7f5e-4778-9c70-babba6c25c55"
+}]]]></http:uri-params>
+			</http:request>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Set response payload" doc:id="cd269c5e-efd1-4abe-8e45-919abd34017c" processor="ee:transform" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Set response payload" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="5711abb4-7ff2-4826-a13f-e08bd6f25189" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Customer updated" doc:id="af79ebe5-34d2-4d9c-bd0e-e5ee7db68e81" processor="logger" times="3">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="INFO" attributeName="level" />
+					<munit-tools:with-attribute whereValue="Customer updated" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="5c5b8881-5f1c-4002-8ef0-3fea22446fa0" actual="#[payload]" expected='#[readUrl("classpath://test2/response-payload.json")]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="test3-customers-api-test-suite" doc:id="ca446df7-aa1a-4347-bf22-23241f41cbb5" description="Test 3: Request sent to retrieve a Customer and finishes successfully">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="customers-api-main" />
+			<munit:enable-flow-source value="get:\customers\(customerId):customers-api-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:spy doc:name="Spy" doc:id="4f485683-277b-4b70-b487-4630f1b061d7" processor="ee:transform">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Set dummy response payload" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="caa51fdf-41a7-4423-a248-3d7cacc7e801" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:after-call >
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="75211d49-e813-46d9-9157-dd34d0df8d10" actual="#[payload]" expected='#[readUrl("classpath://test3/cosmosdb-response-payload.json", "application/json")]' />
+				</munit-tools:after-call>
+			</munit-tools:spy>
+		</munit:behavior>
+		<munit:execution >
+			<http:request method="GET" doc:name="Request" doc:id="e7a003e5-8a31-49e6-ae64-95dd059fd9f3" config-ref="HTTP_Request_configuration" path="/customers/{customerId}">
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Authorization" : "123"
+}]]]></http:headers>
+				<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"customerId" : "4d4de7d6-7f5e-4778-9c70-babba6c25c55"
+}]]]></http:uri-params>
+			</http:request>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Set response payload" doc:id="807c041c-fffc-485d-ac56-3406647d90ac" processor="ee:transform" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Set response payload" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="a14176ff-31d3-4777-bb07-dc7494abd65a" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Customer Retrieved" doc:id="4177e99d-53dd-4a88-a9fb-51cc180267f8" processor="logger" times="2">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="INFO" attributeName="level" />
+					<munit-tools:with-attribute whereValue="Customer Retrieved" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="d052bfad-597d-489c-9a93-d9c2618523c4" actual="#[payload]" expected='#[readUrl("classpath://test3/response-payload.json")]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="test4-customers-api-test-suite" doc:id="b79f0553-98d1-4fe8-bca0-5d36941da9f7" description="Test 4: Request sent to retrieve a Customer. CosmosDB is unavailable" expectedErrorType="ANY">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="customers-api-main" />
+			<munit:enable-flow-source value="get:\customers\(customerId):customers-api-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:mock-when doc:name="Mock when" doc:id="747bc32b-865a-4093-8cae-0c391ef1e7a6" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="cosmosdb-get-document-sub-flow" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APP:COSMOSDB_UNAVAILABLE" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<http:request method="GET" doc:name="Request" doc:id="8097e053-d3b3-44dd-8617-ef8ed2604f46" config-ref="HTTP_Request_configuration" path="/customers/{customerId}">
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Authorization" : "123"
+}]]]></http:headers>
+				<http:uri-params ><![CDATA[#[output application/java
+---
+{
+	"customerId" : "4d4de7d6-7f5e-4778-9c70-babba6c25c55"
+}]]]></http:uri-params>
+			</http:request>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Set response payload" doc:id="8b4f8c97-4041-4a96-bc4e-1e41fbb9dc06" processor="ee:transform" times="0">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Set response payload" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="a14176ff-31d3-4777-bb07-dc7494abd65a" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Customer Retrieved" doc:id="da0102d6-829d-41e4-9016-a1c12e7ffa21" processor="logger" times="0">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="INFO" attributeName="level" />
+					<munit-tools:with-attribute whereValue="Customer Retrieved" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="cf0a0a15-e90a-4620-b852-257f89d7ffb2" actual="#[payload.message]" expected='#["Internal Server Error"]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="test5-customers-api-test-suite" doc:id="119660da-0e6c-4af7-8097-9d41cf59c3b9" description="Test 5: Request sent to create a Customer and finishes successfully">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="customers-api-main" />
+			<munit:enable-flow-source value="post:\customers:application\json:customers-api-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:spy doc:name="Spy" doc:id="311adc1c-f4f1-4271-aa23-aa36909325b2" processor="ee:transform">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Set dummy response payload" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="d88860b5-f099-4120-b745-f9e523699c9e" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:before-call >
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="212c608f-951e-4066-a4f3-259a5b4b8cf0" actual="#[payload - 'customerId']" expected='#[readUrl("classpath://test5/cosmosdb-request-payload.json", "application/json")]'/>
+				</munit-tools:before-call>
+				<munit-tools:after-call >
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="c215cd81-cecf-4fc4-86f7-68d1346180c0" actual="#[payload - 'customerId']" expected='#[readUrl("classpath://test5/cosmosdb-response-payload.json", "application/json")]' />
+				</munit-tools:after-call>
+			</munit-tools:spy>
+			<munit-tools:spy doc:name="Spy" doc:id="4d318f72-86a3-4f79-8049-c087b876fc1a" processor="ee:transform">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Set dummy response payload" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="1dec76c3-2639-4817-bbe7-94a4418755c8" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:before-call >
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="93f96028-96f4-41ed-8419-c2d6fa911000" actual="#[payload - 'customerId']" expected='#[readUrl("classpath://test5/salesforce-request-payload.json", "application/json")]' />
+				</munit-tools:before-call>
+				<munit-tools:after-call >
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="9a02be50-e00a-4a79-b94b-23f0afb3a662" actual="#[payload - 'customerId']" expected='#[readUrl("classpath://test5/salesforce-response-payload.json", "application/json")]' />
+				</munit-tools:after-call>
+			</munit-tools:spy>
+		</munit:behavior>
+		<munit:execution >
+			<set-payload value='#[output application/json --- readUrl("classpath://test5/request-payload.json")]' doc:name="Set Payload" doc:id="5dac37ab-0b94-47b2-9004-f127290a4518" />
+			<http:request method="POST" doc:name="Request" doc:id="fa8f99d4-d6c0-4df4-99fb-db26c4f82d2c" config-ref="HTTP_Request_configuration" path="/customers">
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Authorization" : "123"
+}]]]></http:headers>
+			</http:request>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Set response payload" doc:id="398b1320-4b7d-4d34-892a-8fd3c635701e" processor="ee:transform" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Set response payload" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="0b7a229d-0af0-43a2-8137-38707fc702e9" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Customer Created" doc:id="417bf52a-e818-4c82-946a-6390f4d20a8e" processor="logger" times="3">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="INFO" attributeName="level" />
+					<munit-tools:with-attribute whereValue="Customer Created" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="dce7089c-65e2-4327-8d0a-74db7b5aa0bf" actual="#[payload - 'customerId']" expected='#[readUrl("classpath://test5/response-payload.json")]'/>
+		</munit:validation>
+	</munit:test>
+	<munit:test name="test6-customers-api-test-suite" doc:id="0bbc077f-fa5c-4df6-af39-a2ae0aa2f7ae" description="Test 6: Request sent to create a Customer. Salesforce becomes unavailable" expectedErrorType="ANY">
+		<munit:enable-flow-sources >
+			<munit:enable-flow-source value="customers-api-main" />
+			<munit:enable-flow-source value="post:\customers:application\json:customers-api-config" />
+		</munit:enable-flow-sources>
+		<munit:behavior >
+			<munit-tools:spy doc:name="Spy" doc:id="42f5bf51-bfb3-432f-81c1-0c60076c64a4" processor="ee:transform">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Set dummy response payload" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="d88860b5-f099-4120-b745-f9e523699c9e" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+				<munit-tools:before-call >
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="16c8b8bd-dd11-4ec9-9244-41123c6ba220" actual="#[payload - 'customerId']" expected='#[readUrl("classpath://test6/cosmosdb-request-payload.json", "application/json")]'/>
+				</munit-tools:before-call>
+				<munit-tools:after-call >
+					<munit-tools:assert-equals doc:name="Assert equals" doc:id="944b1b83-c922-41a0-97bb-74f68cc622b7" actual="#[payload - 'customerId']" expected='#[readUrl("classpath://test6/cosmosdb-response-payload.json", "application/json")]' />
+				</munit-tools:after-call>
+			</munit-tools:spy>
+			<munit-tools:mock-when doc:name="Mock when" doc:id="92fd8593-4d1e-453b-8741-d4026b444925" processor="flow-ref">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="salesforce-create-sobjects-sub-flow" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+				<munit-tools:then-return >
+					<munit-tools:error typeId="APP:SALESFORCE_UNAVAILABLE" />
+				</munit-tools:then-return>
+			</munit-tools:mock-when>
+		</munit:behavior>
+		<munit:execution >
+			<set-payload value='#[output application/json --- readUrl("classpath://test6/request-payload.json")]' doc:name="Set Payload" doc:id="11c358dd-b6d3-4317-8970-7608b0e28ea7" />
+			<http:request method="POST" doc:name="Request" doc:id="261cc7ab-2083-425b-8bce-513e61916d6e" config-ref="HTTP_Request_configuration" path="/customers">
+				<http:headers ><![CDATA[#[output application/java
+---
+{
+	"Authorization" : "123"
+}]]]></http:headers>
+			</http:request>
+		</munit:execution>
+		<munit:validation >
+			<munit-tools:verify-call doc:name="Set response payload" doc:id="fccaba8e-f613-4683-8642-9eaa3a89c9c1" processor="ee:transform" times="1">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="Set response payload" attributeName="doc:name" />
+					<munit-tools:with-attribute whereValue="0b7a229d-0af0-43a2-8137-38707fc702e9" attributeName="doc:id" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:verify-call doc:name="Customer Created" doc:id="630bb364-941b-4980-b7d6-4db733ab0ad9" processor="logger" times="3">
+				<munit-tools:with-attributes >
+					<munit-tools:with-attribute whereValue="INFO" attributeName="level" />
+					<munit-tools:with-attribute whereValue="Customer Created" attributeName="doc:name" />
+				</munit-tools:with-attributes>
+			</munit-tools:verify-call>
+			<munit-tools:assert-equals doc:name="Assert equals" doc:id="a3274f99-6696-4dfd-b27d-e9439d268704" actual="#[payload - 'customerId']" expected='#[readUrl("classpath://test6/response-payload.json")]'/>
+		</munit:validation>
+	</munit:test>
+</mule>
