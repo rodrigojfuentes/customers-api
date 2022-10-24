@@ -12,12 +12,9 @@ http:
 
 salesforce:
   username: "TBD"
-  password: "TBD"
-  security-token: "TBD"
 
 cosmosdb:
   db-account-url: "TBD"
-  resource-token: "TBD"
   version: "TBD"
 
 circuit-breaker:

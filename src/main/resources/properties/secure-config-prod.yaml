@@ -1,0 +1,6 @@
+salesforce:
+  password: "TBD"
+  security-token: "TBD"
+
+cosmosdb:
+  resource-token: "TBD"
