@@ -7,11 +7,11 @@
     <flow name="customers-api-main">
         <http:listener config-ref="customers-api-httpListenerConfig" path="${api.path}">
             <http:response statusCode="#[vars.httpStatus default 200]">
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:response>
             <http:error-response statusCode="#[vars.httpStatus default 500]">
-                <http:body>#[payload]</http:body>
-                <http:headers>#[vars.outboundHeaders default {}]</http:headers>
+                <http:body><![CDATA[#[payload]]]></http:body>
+                <http:headers><![CDATA[#[vars.outboundHeaders default {}]]]></http:headers>
             </http:error-response>
         </http:listener>
 		<flow-ref doc:name="circuit-breaker-retrieve-status-sub-flow" doc:id="994b4958-3669-4a54-b1bb-fc8c906a66f9" name="circuit-breaker-retrieve-status-sub-flow" target="cbStatus"/>
@@ -28,7 +28,7 @@
 				<raise-error doc:name="APP:SERVICE_UNAVAILABLE" doc:id="240e1c1c-3ca9-410e-af74-971a3d9ebbb4" type="APP:SERVICE_UNAVAILABLE" description="The API is not available to handle new requests at the moment"/>
 			</otherwise>
 		</choice>
-        <error-handler ref="apikit-error-handler" />
+		<error-handler ref="apikit-error-handler" />
     </flow>
     <flow name="customers-api-console">
         <http:listener config-ref="customers-api-httpListenerConfig" path="/console/*">
