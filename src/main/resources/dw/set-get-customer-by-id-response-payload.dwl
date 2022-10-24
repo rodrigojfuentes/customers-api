@@ -10,7 +10,7 @@ var dbPayload = payload
     companyName: dbPayload.personalInformation.companyName,
     email: dbPayload.personalInformation.email,
     phone: dbPayload.personalInformation.phone,
-    address: dbPayload.address map ((item) -> {
+    address: dbPayload.personalInformation.address map ((item) -> {
         street: item.street,
         houseNumber: item.houseNumber,
         city: item.city,

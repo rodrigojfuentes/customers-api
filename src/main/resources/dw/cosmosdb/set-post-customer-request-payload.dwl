@@ -9,7 +9,7 @@ output application/java
     companyName: payload.personalInformation.companyName,
     email: payload.personalInformation.email,
     phone: payload.personalInformation.phone,
-    address: payload.address map ((item) -> {
+    address: payload.personalInformation.address map ((item) -> {
         street: item.street,
         houseNumber: item.houseNumber,
         city: item.city,
