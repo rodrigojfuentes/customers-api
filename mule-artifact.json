@@ -1,3 +1,10 @@
 {
+  "secureProperties": [
+  	"anypoint.platform.client_secret",
+  	"mule.key",
+  	"secure::salesforce.password",
+  	"secure::salesforce.security-token",
+  	"secure::cosmosdb.resource-token"
+  ],
   "minMuleVersion": "4.4.0"
 }
