@@ -4,7 +4,7 @@
 	xmlns:doc="http://www.mulesoft.org/schema/mule/documentation"
 	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.mulesoft.org/schema/mule/core http://www.mulesoft.org/schema/mule/core/current/mule.xsd
 http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/current/mule-os.xsd">
-	<sub-flow name="circuit-breaker-evaluate-status-sub-flow" doc:id="357e78d2-083b-454c-ae71-68f9dc15f767" >
+	<sub-flow name="circuit-breaker-evaluate-update-status-sub-flow" doc:id="357e78d2-083b-454c-ae71-68f9dc15f767" >
 		<flow-ref doc:name="circuit-breaker-retrieve-status-sub-flow" doc:id="f03249d6-cd02-4a9f-82a9-1c9ff6ba28a7" name="circuit-breaker-retrieve-status-sub-flow" target="cbStatus"/>
 		<choice doc:name="Choice" doc:id="7f1404f8-78ec-44e6-9255-43676fb13415">
 				<when expression='#[vars.cbStatus == "closed"]'>
