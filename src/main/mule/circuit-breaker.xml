@@ -20,7 +20,7 @@ http://www.mulesoft.org/schema/mule/os http://www.mulesoft.org/schema/mule/os/cu
 	<flow name="circuit-breaker-evaluate-status-scheduler-flow" doc:id="646d36fb-9639-4b9f-aa36-8a7009a90fec" >
 		<scheduler doc:name="Scheduler" doc:id="572090f7-5494-4e20-b701-b9c5287516c7" >
 			<scheduling-strategy >
-				<fixed-frequency frequency="60000"/>
+				<fixed-frequency frequency="${circuit-breaker.scheduler.frequency}"/>
 			</scheduling-strategy>
 		</scheduler>
 		<flow-ref doc:name="circuit-breaker-retrieve-status-sub-flow" doc:id="2b4ac328-ee51-4836-ad78-e62ab5b8ceb4" name="circuit-breaker-retrieve-status-sub-flow" target="cbStatus" />

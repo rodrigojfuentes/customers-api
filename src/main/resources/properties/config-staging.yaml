@@ -22,6 +22,8 @@ cosmosdb:
 
 circuit-breaker:
   threshold: "0.5"
+  scheduler:
+    frequency: "60000"
   os:
     max-entries: "1"
     entry-ttl: "86400"
